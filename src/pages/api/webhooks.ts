@@ -1,7 +1,9 @@
 import { NextApiRequest, NextApiResponse } from 'next';
+import { monitorEventLoopDelay } from 'perf_hooks';
 import { Readable } from 'stream'
 import Stripe from 'stripe';
 import { stripe } from '../../infra/gateways';
+import { saveSubscription } from './_lib/subscription-manager';
 
 const buffer = async (readable: Readable): Promise<Buffer> => {
   const chunks = []
@@ -18,7 +20,10 @@ export const config = {
 }
 
 const relevantEvents = new Set([
-  'checkout.session.completed'
+  'checkout.session.completed',
+  'customer.subscriptions.created',
+  'customer.subscriptions.updated',
+  'customer.subscriptions.deleted'
 ])
 
 export default async (request: NextApiRequest, response: NextApiResponse) => {
@@ -32,6 +37,26 @@ export default async (request: NextApiRequest, response: NextApiResponse) => {
       return response.status(400).send(`Webhook error: ${err.message}`)
     }
     if(relevantEvents.has(event.type)) {
+      try {
+        switch(event.type) {
+          case 'checkout.sesion.completed':
+            const { subscription, customer } = event.data.object as Stripe.Checkout.Session
+            await saveSubscription({ customerId: customer.toString(), subscriptionId: subscription.toString(), createAction: true })
+            break
+          case 'customer.subscription.updated':
+          case 'customer.subscription.deleted':
+            const subscriptionEvent = event.data.object as Stripe.Subscription
+            await saveSubscription({ 
+              subscriptionId: subscriptionEvent.id, 
+              customerId: subscriptionEvent.customer.toString()
+            })
+            break
+          default: 
+            throw new Error('Unhandled event')
+        }
+      } catch (err) {
+        return response.json({ error: 'Webhook handler failed' })
+      }
       console.log('Event received: \n', event)
     }
     response.json({ received: true })
