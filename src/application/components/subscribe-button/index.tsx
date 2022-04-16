@@ -1,5 +1,6 @@
 import { signIn, useSession } from 'next-auth/react'
 import { api } from '../../../infra/gateways/api'
+import { getStripeBrowserClient } from '../../../infra/gateways/stripe-browser-client'
 import styles from './styles.module.scss'
 
 type ButtonProps = {
@@ -16,9 +17,11 @@ export const SubscribeButton = ({ priceId }: ButtonProps) => {
     }
     try {
       const { data: { sessionId } } = await api.post('/subscribe')
-      console.log(sessionId)
+      const stripeBrowserClient = await getStripeBrowserClient()
+      await stripeBrowserClient.redirectToCheckout({ sessionId })
+      console.log({ sessionId })
     } catch (err) {
-      console.log(err)
+      alert(err.message)
     }
   }
 
