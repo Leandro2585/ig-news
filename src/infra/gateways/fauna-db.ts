@@ -1,5 +1,6 @@
 import { Client } from 'faunadb'
 
 export const fauna = new Client({
-  secret: process.env.FAUNA_DB_KEY
+  secret: process.env.FAUNADB_KEY ?? 'fnAEkTmI0VAAQs9SVFwBbBeHXeEwhidJwHu1tamG',
+  domain: 'db.us.fauna.com',
 })

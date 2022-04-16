@@ -4,7 +4,7 @@ import { FiX } from 'react-icons/fi'
 import styles from './styles.module.scss'
 
 export const SignButton = () => {
-  const { status, data } = useSession() 
+  const { status, data } = useSession()
   return status === 'authenticated' ? (
     <button type='button' className={styles.sign_button}>
       <FaGithub color='#04D361' />
