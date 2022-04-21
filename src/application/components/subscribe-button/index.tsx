@@ -1,6 +1,5 @@
 import { signIn, useSession } from 'next-auth/react'
-import { api } from '../../../infra/gateways/api'
-import { getStripeBrowserClient } from '../../../infra/gateways/stripe-browser-client'
+import { api, getStripeBrowserClient } from '../../../infra/gateways'
 import styles from './styles.module.scss'
 
 type ButtonProps = {
