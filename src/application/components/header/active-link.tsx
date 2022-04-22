@@ -9,7 +9,7 @@ interface ActiveLinkProps extends LinkProps {
 
 export const ActiveLink = ({ children, ...rest }: ActiveLinkProps) => {
   const { asPath } = useRouter()
-  const className = asPath === rest.href ? styles.active : ''
+  const className =  `${rest.href}`.split('/')[1] === asPath.split('/')[1] ? styles.active : ''
   return (
     <Link {...rest}>
       {cloneElement(children, { className })}

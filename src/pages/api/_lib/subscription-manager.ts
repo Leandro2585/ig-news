@@ -7,7 +7,7 @@ type Subscription = {
   createAction?: boolean
 }
 
-export const saveSubscription = async ({ customerId, subscriptionId, createAction = false  }: Subscription) => {
+export const saveSubscription = async ({ customerId, subscriptionId, createAction  }: Subscription) => {
   const userRef = await fauna.query(
     q.Select(
       'ref',
@@ -19,6 +19,7 @@ export const saveSubscription = async ({ customerId, subscriptionId, createActio
       )
     )
   )
+  console.log(userRef)
   const subscription = await stripe.subscriptions.retrieve(subscriptionId)
   const subscriptionData = {
     id: subscription.id,
