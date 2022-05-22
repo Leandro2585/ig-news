@@ -16,8 +16,10 @@
     "module": "esnext",
     "moduleResolution": "node",
     "resolveJsonModule": true,
-    "isolatedModules": true,
-    "jsx": "preserve"
+    "isolatedModules": false,
+    "jsx": "preserve",
+    "rootDirs": ["src", "tests"],
+    "baseUrl": "./src",
   },
   "include": [
     "next-env.d.ts",
