@@ -12,7 +12,7 @@ const makeSUT = (): RenderResult => {
 }
 
 describe('Sign Button Component', () => {
-  let useSessionMocked
+  let useSessionMocked: jest.Mock
   beforeAll(() => {
     useSessionMocked = mocked(useSession).mockReturnValue({ 
       data: { 
