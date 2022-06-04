@@ -8,7 +8,7 @@ import { stripe } from '../infra/gateways';
 type HomeProps = {
   product: {
     priceId: string
-    amount: number
+    amount: string
   }
 }
 
@@ -28,7 +28,7 @@ export default function Home({ product }: HomeProps) {
           Get access to all the publications <br/>
           <span>for {product.amount} month</span>
         </p>
-        <SubscribeButton priceId={product.priceId}/>
+        <SubscribeButton/>
       </section>
       <img src='/svgs/girl-coding.svg' alt='Girl Coding'/>
     </main>

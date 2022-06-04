@@ -11,9 +11,6 @@ const makeSUT = (): RenderResult => {
 }
 
 describe('Header Component', () => {
-  beforeAll(() => {
-  })
-
   beforeEach(() => {
     makeSUT()
   })
